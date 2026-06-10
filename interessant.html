@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curious — Dingen die je nog niet wist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0B1120;
+    --cream: #F0EEE9;
+    --amber: #FFAA00;
+    --sky: #4FC3F7;
+    --muted: #8A9BAB;
+    --card-bg: #111827;
+    --border: #1E2D40;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 1.2rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(11,17,32,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 1.25rem; letter-spacing: -0.03em;
+    color: var(--amber);
+  }
+  .logo span { color: var(--cream); }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav a {
+    text-decoration: none; color: var(--muted); font-size: 0.85rem;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--amber); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 2.5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(79,195,247,0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,170,0,0.06) 0%, transparent 60%);
+  }
+  .grid-lines {
+    position: absolute; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 780px; }
+  .eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--amber); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .eyebrow::before {
+    content: ''; display: block;
+    width: 2rem; height: 1px; background: var(--amber);
+  }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 1.5rem;
+  }
+  h1 em { color: var(--sky); font-style: normal; }
+  .hero-sub {
+    color: var(--muted); font-size: 1.1rem; line-height: 1.7;
+    max-width: 520px; margin-bottom: 3rem;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--amber); color: var(--navy);
+    padding: 0.85rem 1.8rem; border-radius: 3px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    letter-spacing: 0.02em; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,170,0,0.3); }
+  .btn-ghost {
+    background: transparent; color: var(--cream);
+    border: 1px solid var(--border); margin-left: 1rem;
+  }
+  .btn-ghost:hover { border-color: var(--sky); color: var(--sky); box-shadow: none; }
+
+  .hero-stats {
+    position: absolute; right: 2.5rem; bottom: 4rem; z-index: 1;
+    display: flex; flex-direction: column; gap: 1.5rem;
+    text-align: right;
+  }
+  .stat-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem; font-weight: 700; color: var(--amber);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── SECTION ── */
+  section { padding: 6rem 2.5rem; }
+  .section-header { margin-bottom: 3rem; }
+  .section-tag {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--sky); margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 700; letter-spacing: -0.03em;
+  }
+
+  /* ── FLIP CARDS ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .flip-card {
+    height: 220px;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transition: transform 0.65s cubic-bezier(0.4,0,0.2,1);
+    transform-style: preserve-3d;
+  }
+  .flip-card:hover .flip-inner,
+  .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 4px;
+    padding: 1.75rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    border: 1px solid var(--border);
+  }
+  .flip-front { background: var(--card-bg); }
+  .flip-back {
+    background: linear-gradient(135deg, #0d2137 0%, #0B1120 100%);
+    transform: rotateY(180deg);
+    border-color: var(--sky);
+    justify-content: center;
+  }
+  .card-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .card-category {
+    font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem; font-weight: 500; margin-top: 0.5rem;
+    line-height: 1.4;
+  }
+  .card-hint {
+    font-size: 0.75rem; color: var(--amber);
+    display: flex; align-items: center; gap: 0.3rem;
+  }
+  .flip-back p {
+    font-size: 0.95rem; line-height: 1.65;
+    color: var(--cream);
+  }
+  .flip-back .card-category { color: var(--sky); margin-bottom: 1rem; }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 2.5rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0.5rem; bottom: 0;
+    width: 1px; background: linear-gradient(var(--sky), transparent);
+  }
+  .tl-item { position: relative; margin-bottom: 3rem; }
+  .tl-dot {
+    position: absolute; left: -2.65rem; top: 0.35rem;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 12px rgba(255,170,0,0.5);
+  }
+  .tl-year {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.15em;
+    color: var(--amber); margin-bottom: 0.4rem;
+  }
+  .tl-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15rem; font-weight: 500; margin-bottom: 0.5rem;
+  }
+  .tl-body { color: var(--muted); font-size: 0.9rem; line-height: 1.65; max-width: 520px; }
+
+  /* ── BIG NUMBERS ── */
+  .numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .number-cell {
+    background: var(--card-bg);
+    padding: 2rem 1.5rem;
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.25s;
+  }
+  .number-cell:hover { background: #151f30; }
+  .big-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.8rem; font-weight: 700;
+    color: var(--sky); line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .num-label {
+    font-size: 0.85rem; color: var(--muted); line-height: 1.5;
+  }
+  .num-label strong { color: var(--cream); }
+
+  /* ── QUIZ ── */
+  .quiz-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2.5rem;
+    max-width: 660px;
+  }
+  .quiz-q {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.3rem; font-weight: 500;
+    margin-bottom: 1.5rem; line-height: 1.45;
+  }
+  .quiz-options {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .quiz-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--cream);
+    padding: 0.85rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.9rem; font-family: 'Inter', sans-serif;
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .quiz-btn:hover { border-color: var(--sky); background: rgba(79,195,247,0.06); }
+  .quiz-btn.correct { border-color: #4ade80; background: rgba(74,222,128,0.1); color: #4ade80; }
+  .quiz-btn.wrong { border-color: #f87171; background: rgba(248,113,113,0.1); color: #f87171; }
+  .quiz-result { font-size: 0.9rem; min-height: 1.4rem; color: var(--muted); }
+  .quiz-next {
+    margin-top: 1rem;
+    background: transparent; border: 1px solid var(--amber);
+    color: var(--amber); padding: 0.65rem 1.25rem;
+    border-radius: 3px; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 500;
+    font-size: 0.85rem; transition: background 0.2s;
+    display: none;
+  }
+  .quiz-next.show { display: inline-flex; }
+  .quiz-next:hover { background: rgba(255,170,0,0.1); }
+  .quiz-score {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    background: rgba(255,170,0,0.03);
+  }
+  .marquee-track {
+    display: flex; gap: 3rem; width: max-content;
+    animation: marquee 28s linear infinite;
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item {
+    white-space: nowrap; font-size: 0.78rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); display: flex; align-items: center; gap: 0.75rem;
+  }
+  .marquee-item::after { content: '✦'; color: var(--amber); font-size: 0.6rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--muted); font-size: 0.8rem;
+  }
+  .footer-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700; color: var(--amber);
+  }
+
+  @media (max-width: 640px) {
+    .hero-stats { display: none; }
+    .quiz-options { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">curious<span>.</span></div>
+  <ul>
+    <li><a href="#feiten">Feiten</a></li>
+    <li><a href="#getallen">Getallen</a></li>
+    <li><a href="#tijdlijn">Tijdlijn</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Wetenswaardigheden over de wereld</div>
+    <h1>De wereld is<br><em>vreemder</em> dan<br>je denkt.</h1>
+    <p class="hero-sub">Van kosmische schaal tot microscopische wonderen — hier verzamelen we de feiten die je blik op de werkelijkheid veranderen.</p>
+    <div>
+      <a href="#feiten" class="btn">Begin ontdekken ↓</a>
+      <a href="#quiz" class="btn btn-ghost">Doe de quiz</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-num" id="counter1">0</div>
+      <div class="stat-label">miljard jaar oud — de aarde</div>
+    </div>
+    <div>
+      <div class="stat-num">∞</div>
+      <div class="stat-label">dingen om te ontdekken</div>
+    </div>
+  </div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item">Octopussen hebben drie harten</span>
+    <span class="marquee-item">Een dag op Venus duurt langer dan een jaar</span>
+    <span class="marquee-item">Honing bederft nooit</span>
+    <span class="marquee-item">Cleopatra leefde dichter bij de iPhone dan bij de piramiden</span>
+    <span class="marquee-item">Mieren kunnen 50 keer hun eigen gewicht tillen</span>
+    <span class="marquee-item">Er zijn meer sterren dan zandkorrels op aarde</span>
+    <span class="marquee-item">Het menselijk lichaam heeft 37 biljoen cellen</span>
+    <span class="marquee-item">Octopussen hebben drie harten</span>
+    <span class="marquee-item">Een dag op Venus duurt langer dan een jaar</span>
+    <span class="marquee-item">Honing bederft nooit</span>
+    <span class="marquee-item">Cleopatra leefde dichter bij de iPhone dan bij de piramiden</span>
+    <span class="marquee-item">Mieren kunnen 50 keer hun eigen gewicht tillen</span>
+    <span class="marquee-item">Er zijn meer sterren dan zandkorrels op aarde</span>
+    <span class="marquee-item">Het menselijk lichaam heeft 37 biljoen cellen</span>
+  </div>
+</div>
+
+<!-- FLIP CARDS -->
+<section id="feiten">
+  <div class="section-header">
+    <div class="section-tag">Hover om te onthullen</div>
+    <h2>Verborgen feiten</h2>
+  </div>
+  <div class="cards-grid">
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div>
+            <div class="card-icon">🐙</div>
+            <div class="card-category">Biologie</div>
+            <div class="card-title">Octopussen zijn blauw van bloed — maar waarom?</div>
+          </div>
+          <div class="card-hint">↻ Draai om</div>
+        </div>
+        <div class="flip-back">
+          <div class="card-category">Biologie</div>
+          <p>Octopusbloed bevat hemocyanine — een koper-eiwit dat zuurstof transporteert. Koper geeft het bloed een blauwe kleur. Dit werkt beter in koude, zuurstofarme diepzeeomstandigheden.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div>
+            <div class="card-icon">🌌</div>
+            <div class="card-category">Kosmologie</div>
+            <div class="card-title">Het licht dat jij nu ziet, is miljoenen jaren oud</div>
+          </div>
+          <div class="card-hint">↻ Draai om</div>
+        </div>
+        <div class="flip-back">
+          <div class="card-category">Kosmologie</div>
+          <p>Licht van verre sterren heeft miljoenen lichtjaren gereisd. Als je naar de Andromedanevel kijkt, zie je hoe die eruitzag 2,5 miljoen jaar geleden — voor de mens bestond.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div>
+            <div class="card-icon">🧠</div>
+            <div class="card-category">Neurowetenschappen</div>
+            <div class="card-title">Jij bent niet degene die besluit te bewegen</div>
+          </div>
+          <div class="card-hint">↻ Draai om</div>
+        </div>
+        <div class="flip-back">
+          <div class="card-category">Neurowetenschappen</div>
+          <p>Benjamin Libet ontdekte dat je brein al 350 ms vóór jij "beslist" te bewegen actief is. Vrije wil is misschien een verhaal dat je hersenen je achteraf vertellen.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div>
+            <div class="card-icon">⏳</div>
+            <div class="card-category">Geschiedenis</div>
+            <div class="card-title">Cleopatra en de iPhone: dichter dan je denkt</div>
+          </div>
+          <div class="card-hint">↻ Draai om</div>
+        </div>
+        <div class="flip-back">
+          <div class="card-category">Geschiedenis</div>
+          <p>Cleopatra leefde rond 30 v.Chr. De iPhone verscheen in 2007. Dat is ~2037 jaar. De piramides dateren van ~2560 v.Chr. — 2530 jaar vóór haar. Ze leefde dichter bij ons dan bij de bouwers van de piramides.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div>
+            <div class="card-icon">🌍</div>
+            <div class="card-category">Geografie</div>
+            <div class="card-title">Er is méér water onder de grond dan aan de oppervlakte</div>
+          </div>
+          <div class="card-hint">↻ Draai om</div>
+        </div>
+        <div class="flip-back">
+          <div class="card-category">Geografie</div>
+          <p>In het onderste aardmantelgesteente bevindt zich een mineraal genaamd ringwoodiet, dat water bevat — mogelijk drie keer de hoeveelheid van alle oceanen samen.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div>
+            <div class="card-icon">🍯</div>
+            <div class="card-category">Scheikunde</div>
+            <div class="card-title">Honing is onverwoestbaar — letterlijk</div>
+          </div>
+          <div class="card-hint">↻ Draai om</div>
+        </div>
+        <div class="flip-back">
+          <div class="card-category">Scheikunde</div>
+          <p>Honing ouder dan 3000 jaar, gevonden in Egyptische graven, was nog eetbaar. Lage vochtgehalte, hoog zuurgehalte en waterstofperoxide maken het volkomen bacterievijandig.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GETALLEN -->
+<section id="getallen" style="background: rgba(255,255,255,0.015);">
+  <div class="section-header">
+    <div class="section-tag">De schaal van dingen</div>
+    <h2>Getallen die duizelen</h2>
+  </div>
+  <div class="numbers-grid">
+    <div class="number-cell">
+      <div class="big-num">8,6k</div>
+      <div class="num-label"><strong>slagen per dag</strong> maakt je hart — zonder dat je eraan denkt</div>
+    </div>
+    <div class="number-cell">
+      <div class="big-num">37T</div>
+      <div class="num-label"><strong>cellen</strong> in het menselijk lichaam — elk met een volledig DNA-exemplaar</div>
+    </div>
+    <div class="number-cell">
+      <div class="big-num">100B</div>
+      <div class="num-label"><strong>sterrenstelsels</strong> in het zichtbare universum</div>
+    </div>
+    <div class="number-cell">
+      <div class="big-num">4,54</div>
+      <div class="num-label"><strong>miljard jaar</strong> oud is de Aarde — zo oud dat het onvoorstelbaar is</div>
+    </div>
+    <div class="number-cell">
+      <div class="big-num">10¹⁴</div>
+      <div class="num-label"><strong>neuronen-synapsen</strong> in jouw brein — meer dan sterren in de Melkweg</div>
+    </div>
+    <div class="number-cell">
+      <div class="big-num">0,4s</div>
+      <div class="num-label"><strong>vertraging</strong> van bewust bewustzijn ten opzichte van hersenactiviteit</div>
+    </div>
+  </div>
+</section>
+
+<!-- TIJDLIJN -->
+<section id="tijdlijn">
+  <div class="section-header">
+    <div class="section-tag">Doorbraken</div>
+    <h2>Momenten die alles veranderden</h2>
+  </div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">~10.000 v.Chr.</div>
+      <div class="tl-title">De landbouwrevolutie</div>
+      <div class="tl-body">Mensen begonnen planten te verbouwen en dieren te temmen. Dit leidde tot nederzettingen, specialisatie — en uiteindelijk beschaving. Alles wat daarna kwam, begon hier.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1543</div>
+      <div class="tl-title">Copernicus plaatst de zon in het centrum</div>
+      <div class="tl-body">Voor het eerst beargumenteerde een Europese geleerde dat de Aarde om de Zon draait — niet andersom. Dat klonk ketters. Het was revolutionair.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1859</div>
+      <div class="tl-title">Darwin publiceert "On the Origin of Species"</div>
+      <div class="tl-body">Evolutie door natuurlijke selectie legde uit hoe alle levensvormen op aarde verwant zijn. Eén van de meest impactvolle wetenschappelijke ideeën ooit.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1953</div>
+      <div class="tl-title">De dubbelhelix van DNA ontsluierd</div>
+      <div class="tl-body">Watson, Crick, Franklin en Wilkins ontdekten de structuur van DNA — het molecuul dat alle erfelijke informatie draagt. De basis van de moderne biologie.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">1969</div>
+      <div class="tl-title">De mens zet voet op de maan</div>
+      <div class="tl-body">Apollo 11 liet zien waartoe menselijke vindingrijkheid en samenwerking in staat zijn. Neil Armstrong's stap was 384.000 kilometer ver van huis.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-year">2023</div>
+      <div class="tl-title">Generatieve AI doorbreekt de drempel</div>
+      <div class="tl-body">Voor het eerst kunnen taalmodellen schrijven, redeneren en code genereren op een niveau dat niet van mensen te onderscheiden is. Een nieuw tijdperk begint.</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz" style="background: rgba(255,255,255,0.015);">
+  <div class="section-header">
+    <div class="section-tag">Test jezelf</div>
+    <h2>Hoeveel weet jij?</h2>
+  </div>
+  <div class="quiz-wrap">
+    <div class="quiz-score" id="quizScore">Vraag 1 van 5</div>
+    <div class="quiz-q" id="quizQ"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-result" id="quizResult"></div>
+    <button class="quiz-next" id="quizNext" onclick="nextQuestion()">Volgende vraag →</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">curious.</div>
+  <div>Kennis is de enige rijkdom die groeit door te delen.</div>
+</footer>
+
+<script>
+// Counter animation
+function animateCounter(el, target, suffix) {
+  let start = 0;
+  const step = target / 60;
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { el.textContent = target + suffix; clearInterval(timer); return; }
+    el.textContent = Math.floor(start) + suffix;
+  }, 25);
+}
+setTimeout(() => animateCounter(document.getElementById('counter1'), 4.5, 'B'), 600);
+
+// Quiz
+const questions = [
+  {
+    q: "Hoeveel harten heeft een octopus?",
+    opts: ["1", "2", "3", "4"],
+    answer: 2,
+    expl: "Drie harten: twee voor de kieuwen, één voor de rest van het lichaam."
+  },
+  {
+    q: "Welk materiaal is sterker dan staal maar lichter dan kunststof?",
+    opts: ["Grafeen", "Titanium", "Kevlar", "Carbon"],
+    answer: 0,
+    expl: "Grafeen — één laag koolstofatomen — is 200× sterker dan staal maar extreem licht."
+  },
+  {
+    q: "Hoe lang duurt een dag op Venus (in aardse dagen)?",
+    opts: ["24 uur", "117 dagen", "365 dagen", "88 dagen"],
+    answer: 1,
+    expl: "Venus draait zo langzaam om zijn as dat één dag langer duurt dan zijn jaar."
+  },
+  {
+    q: "Welk land heeft de meeste tijdzones ter wereld?",
+    opts: ["Rusland", "China", "USA", "Frankrijk"],
+    answer: 3,
+    expl: "Frankrijk! Inclusief overzeese gebieden heeft het 12 tijdzones — meer dan Rusland."
+  },
+  {
+    q: "Wat is de snelste spier in het menselijk lichaam?",
+    opts: ["Hartspier", "Oogspier", "Tongspier", "Kauwspier"],
+    answer: 1,
+    expl: "De oogspier (musculus rectus) kan de oogbol in minder dan 1/100 seconde bewegen."
+  }
+];
+
+let qi = 0, score = 0, answered = false;
+
+function loadQuestion() {
+  const q = questions[qi];
+  document.getElementById('quizScore').textContent = `Vraag ${qi+1} van ${questions.length} · Score: ${score}`;
+  document.getElementById('quizQ').textContent = q.q;
+  document.getElementById('quizResult').textContent = '';
+  document.getElementById('quizNext').classList.remove('show');
+  answered = false;
+
+  const opts = document.getElementById('quizOptions');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-btn';
+    btn.textContent = o;
+    btn.onclick = () => answer(i);
+    opts.appendChild(btn);
+  });
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[qi];
+  const btns = document.querySelectorAll('.quiz-btn');
+  btns[q.answer].classList.add('correct');
+  if (i !== q.answer) btns[i].classList.add('wrong');
+  else score++;
+  document.getElementById('quizResult').textContent = q.expl;
+  document.getElementById('quizNext').classList.add('show');
+  if (qi === questions.length - 1) document.getElementById('quizNext').textContent = `Bekijk resultaat →`;
+}
+
+function nextQuestion() {
+  qi++;
+  if (qi >= questions.length) {
+    const wrap = document.querySelector('.quiz-wrap');
+    wrap.innerHTML = `
+      <div style="text-align:center;padding:1rem 0">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:700;color:var(--amber)">${score}/${questions.length}</div>
+        <div style="margin-top:1rem;color:var(--muted);">${score===5?'Perfect! Jij bent een echte nieuwsgierige geest.':score>=3?'Goed gedaan! Je weet al veel.':'Blijf ontdekken — kennis groeit met elke vraag.'}</div>
+        <button onclick="location.reload()" style="margin-top:2rem;background:var(--amber);color:var(--navy);border:none;padding:0.75rem 1.5rem;border-radius:3px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:700">Opnieuw spelen</button>
+      </div>`;
+    return;
+  }
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
